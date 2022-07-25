@@ -11,16 +11,16 @@ Set-Variable -Name ExportFolder -Value "C:\Temp\"
 
 
 $el_c = @()   #consolidated error log
-$now=get-date
-$startdate=$now.adddays(-$EventAgeDays)
-$ExportFile=$ExportFolder + "el" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"  # we cannot use standard delimiteds like ":"
+$now = Get-Date
+$startdate = $now.AddDays(-$EventAgeDays)
+$ExportFile = $ExportFolder + "el" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"  # we cannot use standard delimiteds like ":"
 
 foreach($comp in $CompArr)
 {
   foreach($log in $LogNames)
   {
     Write-Host Processing $comp\$log
-    $el = get-eventlog -ComputerName $comp -log $log -After $startdate -EntryType $EventTypes
+    $el = Get-EventLog -ComputerName $comp -Log $log -After $startdate -EntryType $EventTypes
     $el_c += $el  #consolidating
   }
 }
