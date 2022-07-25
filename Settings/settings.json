@@ -1,7 +1,21 @@
 {   
-    "WindowsEvent":
+    "workFolder": "Reports",
+    "windowsEvent":
     {
-        "daysLastGetEvents": 30     // количество дней за сколько собирать события из журналов событий
+        "daysLastGetEvents": 30,     // количество дней за сколько собирать события из журналов событий
+        "logs":
+        [
+            "Application",
+            "System",
+            "DFS Replication",
+            "Directory Service",
+            "DNS Server"
+        ],
+        "eventTypes":
+        [
+            "Error",
+            "Warning"
+        ]
     },
     "PerformanceMonitor":
     {
