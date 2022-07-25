@@ -1,1 +1,15 @@
+# Setup
+title:        ad.audit.MSware.ru
+tagline:      Аудит Microsoft Active Directory
+
+author:
+  name:       Данил Степанов
+  url:        http://danil.stepanov.name 
+
+lang: ru-RU
+encoding: utf-8
+permalink: pretty
+highlighter: rouge
+markdown: kramdown
+
 theme: jekyll-theme-cayman
