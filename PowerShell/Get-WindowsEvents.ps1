@@ -3,10 +3,20 @@
 #  Author: Danil Stepanov, msware.ru (c) 2022
 #
 
-Set-Variable -Name EventAgeDays -Value 7     #we will take events for the latest 7 days
+# $Variables = Get-Content -Path settings.json | ConvertFrom-Json # загрузка JSON файла настроек
+
+# Set-Variable -Name EventAgeDays -Value 7     #we will take events for the latest 7 days
+Set-Variable -Name EventAgeDays -Value $Variables.WindowsEvent.daysLastGetEvents
+
 Set-Variable -Name CompArr -Value @("DC1", "DC2")   # replace it with your server names
+
+# Set-Variable -Name LogNames -Value $Variables.logs
 Set-Variable -Name LogNames -Value @("Application", "System", "DFS Replication", "Directory Service", "DNS Server")  # Checking app and system logs
+
 Set-Variable -Name EventTypes -Value @("Error", "Warning")  # Loading only Errors and Warnings
+# Set-Variable -Name EventTypes -Value $Variables.eventTypes # Loading only Errors and Warnings
+
+# Set-Variable -Name ExportFolder -Value Get-Location + "\" + $Variables.workFolder
 Set-Variable -Name ExportFolder -Value "C:\Temp\"
 
 
