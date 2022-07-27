@@ -1,6 +1,6 @@
 # Файл настроек предназначенный для задания параметров аудита
 
-Для снятия счетчиков производительности (Performance Monitor) необходимо загрузить экспортировать группу сборчиков из [XML файла](/Settings/PerfMon-DomainControllerDiagnostics.xml):
+Для снятия счетчиков производительности (Performance Monitor) необходимо экспортировать группу сборшиков из [XML файла](/Settings/PerfMon-DomainControllerDiagnostics.xml):
 
 ```
 logman import "Domain Controller Diagnostics" -xml "Domain Controller Diagnostics.xml"
