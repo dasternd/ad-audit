@@ -1,13 +1,12 @@
-# Файл настроек предназначенный для задания параметров аудита
+# Файл настроек settings.json
 
-Для снятия счетчиков производительности (Performance Monitor) необходимо экспортировать группу сборшиков из [XML файла](/Settings/PerfMon-DomainControllerDiagnostics.xml):
+Некоторые параметры, используемы для сбора данных для аудита Active Directory, являются переменными и могут изменяться от аудита к аудиту и чтобы не изменять код скриптов для бора данных, используется файл с настройками.
 
-```
-logman import "Domain Controller Diagnostics" -xml "Domain Controller Diagnostics.xml"
-```
+Файл с настройками [settings.json](/Settings/settings.json) должен распологаться в том же каталоге что и скрипт [Start-AuditAD.ps1](/PowerShell/Start-AuditAD.ps1), которые содержаться в архивном файле AuditAD.zip.
 
-По окончанию сбора счеткиков производительности возможно конфертировать .blg файл в .csv файл:
+Архив AuditAD.zip необходимо распаковать на любой логический диск на сервер или рабочую станцию на котором будет запущен скрипт для сбора данных для аудита Active Directory.
 
-```
-relog “Domain Controller Diagnostics.blg” -f csv -o “Domain Controller Diagnostics.csv”
-```
+Содержимое распакованного архива AuditAD.zip будет содержать следующие файлы:
+- Prerequisite.ps1
+- Start-AuditAD.ps1
+- settings.json
