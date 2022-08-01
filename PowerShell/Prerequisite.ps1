@@ -1,4 +1,4 @@
-#
+ #
 #  This script prerequisite for audit AD
 #  Author: Danil Stepanov, msware.ru (c) 2022
 #
@@ -21,64 +21,30 @@ function WriteLog
 
 Write-Host "Prerequisite for audit Active Directory"
 
-Write-Host Forest Mode
-$ADForest = Get-ADForest
-$forestMode = $ADForest.ForestMode
-$forestMode
-
-
-Write-Host
-Write-Host FSMO roles
-
-# FSMO roles
-Write-Host
-Write-Host PDSEmulator
-$PDCEmulator = $ADDomain.PDCEmulator
-$PDCEmulator
-
-Write-Host
-Write-Host InfrastructureMaster
-$InfrastructureMaster = $ADDomain.InfrastructureMaster
-$InfrastructureMaster
-
-Write-Host
-Write-Host RIDMaster
-$RIDMaster = $ADDomain.RIDMaster
-$RIDMaster
-
-Write-Host
-Write-Host DomainNamingMaster
-$DomainNamingMaster = $ADForest.DomainNamingMaster
-$DomainNamingMaster
-
-Write-Host
-Write-Host SchemaMaster
-$SchemaMaster = $ADForest.SchemaMaster
-$SchemaMaster 
-
-
 Write-Host
 Write-Host All Domain Controllers
 WriteLog "List Domain Controllers"
 $domControllers = Get-ADDomainController -filter * | Select-Object HostName
 $totalDC = $domControllers.Count
 for ($i = 0; $i -lt $domControllers.Count; $i++) {
-    WriteLog $domController.HostName PS version $PSVer.PSVersion
-    $domControllers[$i].HostName
+    WriteLog $domController.HostName
+    Write-Host $domController.HostName
 } 
 WriteLog "[Info] Total Domain Controllers $totalDC"
 
+Write-Host
+Write-Host Version PowerShell
 WriteLog "Version PowerShell"
 foreach ($domController in $domControllers) {
     $PSVer = Invoke-Command -ComputerName $domController.HostName -ScriptBlock { $PSVersionTable }
+    $psVersion = $PSVer.PSVersion
+    $dc = $domController.HostName
     try {
-        Write-Host
-        WriteLog $domController.HostName PS version $PSVer.PSVersion
-        Write-Host $domController.HostName PS version $PSVer.PSVersion 
+        WriteLog "$dc PS version $psVersion"
+        Write-Host $domController.HostName "PS version" $PSVer.PSVersion
     }
     catch {
-        Write-Host
         Write-Host $Error
         WriteLog $Error
     }
-} 
+}
