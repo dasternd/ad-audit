@@ -1,4 +1,4 @@
- #
+  #
 #  This script prerequisite for audit AD
 #  Author: Danil Stepanov, msware.ru (c) 2022
 #
@@ -8,6 +8,7 @@ $pathProject = Get-Location
 $pathProject = $pathProject.Path + "\"
 # адрес размещения лог-файла
 $pathLogFile = $pathProject + "Prerequisite-" + (Get-Date).ToString('yyyy_MM_dd_HH_mm') + ".log" 
+$doneError = $false
 
 # ФУНКЦИЯ ЛОГИРОВАНИЯ СОБЫТИЙ
 function WriteLog
@@ -36,15 +37,24 @@ Write-Host
 Write-Host Version PowerShell
 WriteLog "Version PowerShell"
 foreach ($domController in $domControllers) {
-    $PSVer = Invoke-Command -ComputerName $domController.HostName -ScriptBlock { $PSVersionTable }
-    $psVersion = $PSVer.PSVersion
-    $dc = $domController.HostName
     try {
+        $PSVer = Invoke-Command -ComputerName $domController.HostName -ScriptBlock { $PSVersionTable }
+        $psVersion = $PSVer.PSVersion
+        $dc = $domController.HostName
         WriteLog "$dc PS version $psVersion"
         Write-Host $domController.HostName "PS version" $PSVer.PSVersion
     }
     catch {
-        Write-Host $Error
+        $doneError = $true
+        Write-Host Error
         WriteLog $Error
     }
 }
+
+if ($doneError) {
+    Write-Host Done with error
+}
+else {
+    Write-Host 
+    Write-Host Done!
+} 
