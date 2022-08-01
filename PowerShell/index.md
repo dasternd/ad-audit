@@ -1,5 +1,14 @@
 # Содержание скриптов используемые для сбора данных для аудита Active Directory
 
-- [Get-InfoAD.ps1](/PowerShell/Get-InfoAD.ps1)
-- [Get-InfoServer.ps1](/PowerShell/Get-InfoServer.ps1)
-- [Get-WindowsEvents.ps1](/PowerShell/Get-WindowsEvents.ps1)
+- [Prerequisite.ps1](/PowerShell/Prerequisite.ps1)
+- [Start-AuditAD.ps1](/PowerShell/Start-AuditAD.ps1)
+
+
+## Prerequisite.ps1
+
+Используется для проверки готовности IT инфраструктуры в автоматическом режиме осуществить сбора необходимой информации для проведения аудита Active Directory.
+
+
+## Start-AuditAD.ps1
+
+Используется для запуска процесса сбора необходимой информации в автоматическом режиме для проведени аудита Active Directory.
