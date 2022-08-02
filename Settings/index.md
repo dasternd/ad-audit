@@ -16,6 +16,7 @@
 {
     "workFolder": "Audit",
     "windowsEvent": {
+        "folder": "Events",
         "daysLastGetEvents": 30,
         "logs": [
             "Application",
