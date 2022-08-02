@@ -7,7 +7,7 @@
 $pathProject = Get-Location 
 $pathProject = $pathProject.Path + "\"
 
-
+# получение списка контроллеров домена Active Directory
 function Get-DCs {
     $DCs = @()
     $domControllers = Get-ADDomainController -filter * | Select-Object HostName
@@ -19,6 +19,7 @@ function Get-DCs {
     return $DCs
 }
 
+# получение событий с журналов Windows со всех контроллеров доменов Active Directory
 function Get-WindowsEvents {
 
     $Variables = Get-Content -Path ($pathProject + "settings.json")  -Raw | ConvertFrom-Json # загрузка JSON файла настроек
@@ -28,13 +29,15 @@ function Get-WindowsEvents {
     $LogNames = $Variables.WindowsEvent.logs
     $EventTypes = $Variables.WindowsEvent.eventTypes
     $ExportFolder = Get-Location
-    $ExportFolder = $ExportFolder.Path + "\"
-  
+    $ExportFolder = $ExportFolder.Path + "\" + $Variables.WindowsEvent.folder + "\"
+
+    if (!(Test-Path $ExportFolder)) {
+        New-Item -Path $ExportFolder -ItemType Directory
+    }
 
     $el_c = @()   #consolidated error log
     $now = Get-Date
     $startdate = $now.AddDays(-$EventAgeDays)
-    # $ExportFile = $ExportFolder + "el" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"  # we cannot use standard delimiteds like ":"
 
     foreach ($comp in $CompArr) {
 
@@ -49,10 +52,7 @@ function Get-WindowsEvents {
         Write-Host Exporting to $ExportFile
         $el_sorted | Export-CSV $ExportFile -NoTypeInfo
     }
-    # $el_sorted = $el_c | Sort-Object TimeGenerated    #sort by time
-    # Write-Host Exporting to $ExportFile
-    # $el_sorted | Select EntryType, TimeGenerated, Source, EventID, MachineName | Export-CSV $ExportFile -NoTypeInfo  #EXPORT
-    # $el_sorted | Export-CSV $ExportFile -NoTypeInfo  #EXPORT
+
     Write-Host Done!
 }
 
