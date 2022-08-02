@@ -57,7 +57,10 @@ function Get-WindowsEvents {
 }
 
 function Start-AuditAD {
+    Write-Host GET INFORMATION ABOUT WINDOWS EVENTS
     Get-WindowsEvents
+
+    Write-Host DONE!
 }
 
 Start-AuditAD 
