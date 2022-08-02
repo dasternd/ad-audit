@@ -10,3 +10,27 @@
 - Prerequisite.ps1 (скрипт для проверки готовности инфраструктуры к запуску основного скрипта по сбору данных)
 - Start-AuditAD.ps1 (скрипт для запуска сбора данных)
 - settings.json (файл настроек)
+
+
+``` JSON
+{
+    "workFolder": "Audit",
+    "windowsEvent": {
+        "daysLastGetEvents": 30,
+        "logs": [
+            "Application",
+            "System",
+            "DFS Replication",
+            "Directory Service",
+            "DNS Server"
+        ],
+        "eventTypes": [
+            "Error",
+            "Warning"
+        ]
+    },
+    "PerformanceMonitor": {
+        "daysRun2GetMetrics": 7
+    }
+}
+```
