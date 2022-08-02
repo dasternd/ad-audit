@@ -18,6 +18,8 @@
 
 ```
 logman import "Domain Controller Diagnostics" -xml "Domain Controller Diagnostics.xml"
+logman start "Domain Controller Diagnostics"
+logman stop "Domain Controller Diagnostics"
 ```
 
 По окончанию сбора счеткиков производительности возможно конфертировать .blg файл в .csv файл:
