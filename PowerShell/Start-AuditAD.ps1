@@ -34,19 +34,25 @@ function Get-WindowsEvents {
     $el_c = @()   #consolidated error log
     $now = Get-Date
     $startdate = $now.AddDays(-$EventAgeDays)
-    $ExportFile = $ExportFolder + "el" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"  # we cannot use standard delimiteds like ":"
+    # $ExportFile = $ExportFolder + "el" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"  # we cannot use standard delimiteds like ":"
 
     foreach ($comp in $CompArr) {
+
+        $ExportFile = $ExportFolder + $comp + "_Events_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"
+
         foreach ($log in $LogNames) {
             Write-Host Processing $comp\$log
             $el = Get-EventLog -ComputerName $comp -Log $log -After $startdate -EntryType $EventTypes
             $el_c += $el  #consolidating
         }
+        $el_sorted = $el_c | Sort-Object TimeGenerated    #sort by time
+        Write-Host Exporting to $ExportFile
+        $el_sorted | Export-CSV $ExportFile -NoTypeInfo
     }
-    $el_sorted = $el_c | Sort-Object TimeGenerated    #sort by time
-    Write-Host Exporting to $ExportFile
+    # $el_sorted = $el_c | Sort-Object TimeGenerated    #sort by time
+    # Write-Host Exporting to $ExportFile
     # $el_sorted | Select EntryType, TimeGenerated, Source, EventID, MachineName | Export-CSV $ExportFile -NoTypeInfo  #EXPORT
-    $el_sorted | Export-CSV $ExportFile -NoTypeInfo  #EXPORT
+    # $el_sorted | Export-CSV $ExportFile -NoTypeInfo  #EXPORT
     Write-Host Done!
 }
 
