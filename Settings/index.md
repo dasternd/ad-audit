@@ -12,7 +12,7 @@
 - settings.json (файл настроек)
 
 
-``` JSON
+```json
 {
     "workFolder": "Audit",
     "windowsEvent": {
