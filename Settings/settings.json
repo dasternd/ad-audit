@@ -1,24 +1,20 @@
-{   
-    "workFolder": "Reports",
-    "windowsEvent":
-    {
-        "daysLastGetEvents": 30,     // количество дней за сколько собирать события из журналов событий
-        "logs":
-        [
+{
+    "workFolder": "Audit",
+    "windowsEvent": {
+        "daysLastGetEvents": 30,
+        "logs": [
             "Application",
             "System",
             "DFS Replication",
             "Directory Service",
             "DNS Server"
         ],
-        "eventTypes":
-        [
+        "eventTypes": [
             "Error",
             "Warning"
         ]
     },
-    "PerformanceMonitor":
-    {
-        "daysRun2GetMetrics": 7     // количество дней сколько собирать метрики производительности
+    "PerformanceMonitor": {
+        "daysRun2GetMetrics": 7
     }
 }
