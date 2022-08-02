@@ -11,7 +11,7 @@
 Процесс сбора данных для последующего анализа максимально автоматизирован и открыт. Сбор данных выполняется с помощью стандартных командлетов PowerShell и встроенными утилитами Windows.
 
 Осуществляется следующий сбор данных для последующего анализа:
-- Сбор [журналов событий](/WindowsEvent/) (**Windows Event**)
+- ✅ Сбор [журналов событий](/WindowsEvent/) (**Windows Event**)
 - Снятие [счетчиков производительности](/PerformanceMonitor/) (**Performance Monitor**)
 - Анализ [настроек](/Baseline/), распространяемых через групповые политики (**Group Policy**), реестр (**Windows Registry**) и значениями в базе Active Directory на соответствие рекомендациям Microsoft ([Microsoft Security Compliance Toolkit 1.0](https://www.microsoft.com/en-us/download/details.aspx?id=55319))
 - Инвентаризация [оборудования](/InventoryHardware/) контроллеров домена
