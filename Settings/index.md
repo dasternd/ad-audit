@@ -31,6 +31,7 @@
         ]
     },
     "PerformanceMonitor": {
+        "folder": "PerfLogs",
         "daysRun2GetMetrics": 7
     }
 }
