@@ -12,7 +12,7 @@
 
 Осуществляется следующий сбор данных для последующего анализа:
 - ✅ Сбор [журналов событий](/WindowsEvent/) (**Windows Event**)
-- Снятие [счетчиков производительности](/PerformanceMonitor/) (**Performance Monitor**)
+- ❗️ Снятие [счетчиков производительности](/PerformanceMonitor/) (**Performance Monitor**)
 - Анализ [настроек](/Baseline/), распространяемых через групповые политики (**Group Policy**), реестр (**Windows Registry**) и значениями в базе Active Directory на соответствие рекомендациям Microsoft ([Microsoft Security Compliance Toolkit 1.0](https://www.microsoft.com/en-us/download/details.aspx?id=55319))
 - Инвентаризация [оборудования](/InventoryHardware/) контроллеров домена
 - Инвентаризация [программного обеспечения](/InventorySoftware/) установленного на контроллерах домена
