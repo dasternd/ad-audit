@@ -18,5 +18,8 @@
     "PerformanceMonitor": {
         "folder": "PerfLogs",
         "daysRun2GetMetrics": 7
+    },
+    "inventory":{
+        "folder": "Inventory"
     }
 }
