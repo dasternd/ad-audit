@@ -159,18 +159,50 @@ function Start-InventoryHardware {
     Write-Host Done!
 }
 
+function Start-InventoryHotFix {
+    $Variables = Get-Content -Path ($pathProject + "settings.json")  -Raw | ConvertFrom-Json # загрузка JSON файла настроек
+    $DCs = Get-DCs
+    $CompArr = $DCs
+    $ExportFolder = Get-Location
+    $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+
+    if (!(Test-Path $ExportFolder)) {
+        New-Item -Path $ExportFolder -ItemType Directory
+    }
+
+    $now = Get-Date
+
+    foreach ($comp in $CompArr) {
+
+        $ExportFile = $ExportFolder + $comp + "_InventoryHotfix_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"
+
+        Write-Host Processing Inventory Software $comp
+
+        $el =  Get-HotFix -ComputerName $comp
+
+        Write-Host Exporting to $ExportFile
+        $el | Export-CSV $ExportFile -NoTypeInfo
+    }
+
+    Write-Host Done!
+}
+
+
 function Start-AuditAD {
-    #Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [1/15]
-    #Get-WindowsEvents
+    Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [1/15]
+    Get-WindowsEvents
 
-    #Write-Host START PERFORMANCE MONITORS [2/15]
-    #Start-PerformanceMonitors
+    Write-Host START PERFORMANCE MONITORS [2/15]
+    Start-PerformanceMonitors
 
-    #Write-Host START INVENTORY SOFTWARE [3/15]
-    #Start-InventorySoftware
+    Write-Host START INVENTORY SOFTWARE [3/15]
+    Start-InventorySoftware
 
     Write-Host START INVENTORY SOFTWARE [4/15]
     Start-InventoryHardware
+
+    Write-Host START INVENTORY HOTFIXes [5/15]
+    Start-InventoryHotFix
 
     Write-Host DONE!
 }
