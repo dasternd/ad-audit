@@ -56,9 +56,25 @@ function Get-WindowsEvents {
     Write-Host Done!
 }
 
+function Start-PerformanceMonitors {
+    $DCs = Get-DCs
+    $CompArr = $DCs
+    # $ExportFolder = "\\dc2.msware.ru\AuditAD\PerfMon-DomainControllerDiagnostics.xml"
+
+    foreach ($comp in $CompArr) {
+       # Invoke-Command -ComputerName $comp -ScriptBlock { C:\Windows\System32\logman.exe import "Domain Controller Diagnostics" -xml \\dc2.msware.ru\AuditAD\PerfMon-DomainControllerDiagnostics.xml }
+       # Invoke-Command -ComputerName $comp -ScriptBlock { C:\Windows\System32\logman.exe start  "Domain Controller Diagnostics" }
+        logman import "Domain Controller Diagnostics" -xml \\dc2.msware.ru\AuditAD\PerfMon-DomainControllerDiagnostics.xml -s $comp
+        logman start "Domain Controller Diagnostics" -s $comp
+    }
+} 
+
 function Start-AuditAD {
-    Write-Host GET INFORMATION ABOUT WINDOWS EVENTS
-    Get-WindowsEvents
+    #Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [1/2]
+    #Get-WindowsEvents
+
+    Write-Host START PERFORMANCE MONITORS [2/2]
+    Start-PerformanceMonitors
 
     Write-Host DONE!
 }
