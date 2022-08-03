@@ -187,25 +187,84 @@ function Start-InventoryHotFix {
     Write-Host Done!
 }
 
+function Get-InfoOS {
+    $Variables = Get-Content -Path ($pathProject + "settings.json")  -Raw | ConvertFrom-Json # загрузка JSON файла настроек
+    $DCs = Get-DCs
+    $CompArr = $DCs
+    $ExportFolder = Get-Location
+    $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+
+    if (!(Test-Path $ExportFolder)) {
+        New-Item -Path $ExportFolder -ItemType Directory
+    }
+
+    $now = Get-Date
+    
+    $Inventory = New-Object System.Collections.ArrayList
+    $AllComputers = $CompArr 
+    $AllComputersNames = $AllComputers
+
+    Foreach ($ComputerName in $AllComputersNames) {
+        Write-Host Processing Get Information about OS $comp
+
+        $Connection = Test-Connection $ComputerName -Count 1 -Quiet
+        $OSInfo = New-Object System.Object
+        $OSInfo | Add-Member -MemberType NoteProperty -Name "Name" -Value "$ComputerName" -Force
+        if ($Connection -eq "True") {
+            $ComputerInfo =  Invoke-Command -ComputerName $ComputerName -ScriptBlock { Get-ComputerInfo }
+
+            #$ComputerInfo =  Get-ComputerInfo -ComputerName $ComputerName
+
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Windows Current Version" -Value $ComputerInfo.WindowsCurrentVersion -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Windows Product Name" -Value $ComputerInfo.WindowsProductName -Force
+
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Windows System Root" -Value $ComputerInfo.WindowsSystemRoot -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Windows Version" -Value $ComputerInfo.WindowsVersion  -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Name" -Value $ComputerInfo.OsName -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Type" -Value $ComputerInfo.OsType -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Version" -Value $ComputerInfo.OsVersion -Force
+        
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Build Number" -Value $ComputerInfo.OsBuildNumber -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Windows Directory" -Value $ComputerInfo.OsWindowsDirectory -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Locale" -Value $ComputerInfo.OsLocale -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Install Date" -Value $ComputerInfo.OsInstallDate -Force
+
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Language" -Value $ComputerInfo.OsLanguage -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Os Server Level" -Value $ComputerInfo.OsServerLevel -Force
+            $OSInfo | Add-Member -MemberType NoteProperty -Name "Time Zone" -Value $ComputerInfo.TimeZone -Force
+        }
+        $Inventory.Add($OSInfo) | Out-Null
+    }
+
+    $ExportFile = $ExportFolder + "InfoOS_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"
+    
+    Write-Host Exporting to $ExportFile
+    $Inventory | Export-Csv $ExportFile
+
+    Write-Host Done!
+}
 
 function Start-AuditAD {
     $totalSteps = 4
     $step = 1
     
-    Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [($step++)/$totalSteps]
-    Get-WindowsEvents
+    # Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [($step++)/$totalSteps]
+    # Get-WindowsEvents
 
-    #Write-Host START PERFORMANCE MONITORS [++$step/$totalSteps] 
-    #Start-PerformanceMonitors
+    # Write-Host START PERFORMANCE MONITORS [++$step/$totalSteps] 
+    # Start-PerformanceMonitors
     
-    Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
-    Start-InventorySoftware
+    # Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
+    # Start-InventorySoftware
     
-    Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
-    Start-InventoryHardware
+    # Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
+    # Start-InventoryHardware
     
-    Write-Host START INVENTORY HOTFIXes [($step++)/$totalSteps]
-    Start-InventoryHotFix
+    # Write-Host START INVENTORY HOTFIXes [($step++)/$totalSteps]
+    # Start-InventoryHotFix
+
+    Write-Host GET INFORMATION ABOUT OS [($step++)/$totalSteps]
+    Get-InfoOS
 
     Write-Host DONE!
 } 
