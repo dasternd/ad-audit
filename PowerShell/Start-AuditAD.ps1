@@ -189,22 +189,26 @@ function Start-InventoryHotFix {
 
 
 function Start-AuditAD {
-    Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [1/15]
+    $totalSteps = 4
+    $step = 1
+    
+    Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [($step++)/$totalSteps]
     Get-WindowsEvents
 
-    Write-Host START PERFORMANCE MONITORS [2/15]
-    Start-PerformanceMonitors
-
-    Write-Host START INVENTORY SOFTWARE [3/15]
+    #Write-Host START PERFORMANCE MONITORS [++$step/$totalSteps] 
+    #Start-PerformanceMonitors
+    
+    Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
     Start-InventorySoftware
-
-    Write-Host START INVENTORY SOFTWARE [4/15]
+    
+    Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
     Start-InventoryHardware
-
-    Write-Host START INVENTORY HOTFIXes [5/15]
+    
+    Write-Host START INVENTORY HOTFIXes [($step++)/$totalSteps]
     Start-InventoryHotFix
 
     Write-Host DONE!
-}
+} 
+
 
 Start-AuditAD 
