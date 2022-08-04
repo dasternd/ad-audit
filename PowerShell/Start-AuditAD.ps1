@@ -330,14 +330,14 @@ function Start-AuditAD {
     # Write-Host GET INFORMATION ABOUT OS [($step++)/$totalSteps]
     # Get-InfoOS
 
-    Write-Host GET INFORMATION ABOUT INSTALLED WINDOWS FEATURE [($step++)/$totalSteps]
-    Get-WindowsFeature
+    # Write-Host GET INFORMATION ABOUT INSTALLED WINDOWS FEATURE [($step++)/$totalSteps]
+    # Get-WindowsFeature
 
-    Write-Host START TEST DCDIAG [($step++)/$totalSteps]
-    Start-DCDIAG
+    # Write-Host START TEST DCDIAG [($step++)/$totalSteps]
+    # Start-DCDIAG
 
-    Write-Host START TEST REPADMIN [($step++)/$totalSteps]
-    Start-Repadmin
+    # Write-Host START TEST REPADMIN [($step++)/$totalSteps]
+    # Start-Repadmin
 
     Write-Host DONE!
 } 
