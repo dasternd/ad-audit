@@ -244,6 +244,26 @@ function Get-InfoOS {
     Write-Host Done!
 }
 
+function Get-WindowsFeature {
+    $Variables = Get-Content -Path ($pathProject + "settings.json") -Raw | ConvertFrom-Json # загрузка JSON файла настроек
+    $DCs = Get-DCs
+    $CompArr = $DCs
+    $ExportFolder = Get-Location
+    $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+
+    foreach ($comp in $CompArr) {
+        $WindowsFeature = Get-WindowsFeature -ComputerName $comp
+
+        Write-Host Processing Get Information Installed Windows Feature $comp
+
+        $ExportFile = $ExportFolder + $comp + "_WindowsFeature_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"
+
+        $WindowsFeature | Export-CSV $ExportFile -NoTypeInfo
+    }
+
+    Write-Host Done!
+}
+
 function Start-AuditAD {
     $totalSteps = 4
     $step = 1
@@ -263,8 +283,11 @@ function Start-AuditAD {
     # Write-Host START INVENTORY HOTFIXes [($step++)/$totalSteps]
     # Start-InventoryHotFix
 
-    Write-Host GET INFORMATION ABOUT OS [($step++)/$totalSteps]
-    Get-InfoOS
+    # Write-Host GET INFORMATION ABOUT OS [($step++)/$totalSteps]
+    # Get-InfoOS
+
+    Write-Host GET INFORMATION ABOUT INSTALLED WINDOWS FEATURE [($step++)/$totalSteps]
+    Get-WindowsFeature
 
     Write-Host DONE!
 } 
