@@ -307,6 +307,22 @@ function Start-Repadmin {
     Write-Host Done!
 } 
 
+function Get-InfoDNS {
+    $Variables = Get-Content -Path ($pathProject + "settings.json") -Raw | ConvertFrom-Json # загрузка JSON файла настроек
+
+    $ExportFolder = Get-Location
+    $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+
+    $infoDNS =  Get-DnsServer 
+
+    Write-Host Processing Start REPADMIN $comp
+
+    $ExportFile = $ExportFolder + "InfoDNS_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".txt"
+
+    $infoDNS | Out-File $ExportFile
+
+    Write-Host Done!
+}
 
 function Start-AuditAD {
     $totalSteps = 4
@@ -338,6 +354,9 @@ function Start-AuditAD {
 
     # Write-Host START TEST REPADMIN [($step++)/$totalSteps]
     # Start-Repadmin
+
+    Write-Host GET INFORMATION ABOUT DNS [($step++)/$totalSteps]
+    Get-InfoDNS
 
     Write-Host DONE!
 } 
