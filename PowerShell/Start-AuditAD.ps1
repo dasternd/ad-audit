@@ -274,13 +274,13 @@ function Start-DCDIAG {
 
     foreach ($comp in $CompArr) {
     
-        $DCDIAG = Invoke-Command -ComputerName $comp -ScriptBlock {} # тут нужно дописать команду
+        $DCDIAG = Invoke-Command -ComputerName $comp -ScriptBlock { DCDIAG } # тут нужно дописать команду
 
         Write-Host Processing Start DCDIAG $comp
 
-        $ExportFile = $ExportFolder + $comp + "_DCDIAG_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"
+        $ExportFile = $ExportFolder + $comp + "_DCDIAG_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".txt"
 
-        $DCDIAG | Export-CSV $ExportFile -NoTypeInfo
+        $DCDIAG | Out-File $ExportFile
     }
 
     Write-Host Done!
@@ -295,17 +295,18 @@ function Start-Repadmin {
 
     foreach ($comp in $CompArr) {
     
-        $REPADMIN = Invoke-Command -ComputerName $comp -ScriptBlock {} # тут нужно дописать команду
+        $REPADMIN = Invoke-Command -ComputerName $comp -ScriptBlock { repadmin /replsummary } # тут нужно дописать команду
 
         Write-Host Processing Start REPADMIN $comp
 
-        $ExportFile = $ExportFolder + $comp + "_REPADMIN_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"
+        $ExportFile = $ExportFolder + $comp + "_REPADMIN_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".txt"
 
-        $REPADMIN | Export-CSV $ExportFile -NoTypeInfo
+        $REPADMIN | Out-File $ExportFile
     }
 
     Write-Host Done!
-}
+} 
+
 
 function Start-AuditAD {
     $totalSteps = 4
