@@ -252,7 +252,8 @@ function Get-WindowsFeature {
     $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
 
     foreach ($comp in $CompArr) {
-        $WindowsFeature = Get-WindowsFeature -ComputerName $comp
+
+        $WindowsFeature = Invoke-Command -ComputerName $comp -ScriptBlock { Get-WindowsFeature }
 
         Write-Host Processing Get Information Installed Windows Feature $comp
 
