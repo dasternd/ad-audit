@@ -264,6 +264,48 @@ function Get-WindowsFeature {
     Write-Host Done!
 }
 
+function Start-DCDIAG {
+    $Variables = Get-Content -Path ($pathProject + "settings.json") -Raw | ConvertFrom-Json # загрузка JSON файла настроек
+    $DCs = Get-DCs
+    $CompArr = $DCs
+    $ExportFolder = Get-Location
+    $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+
+    foreach ($comp in $CompArr) {
+    
+        $DCDIAG = Invoke-Command -ComputerName $comp -ScriptBlock {} # тут нужно дописать команду
+
+        Write-Host Processing Start DCDIAG $comp
+
+        $ExportFile = $ExportFolder + $comp + "_DCDIAG_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"
+
+        $DCDIAG | Export-CSV $ExportFile -NoTypeInfo
+    }
+
+    Write-Host Done!
+}
+
+function Start-Repadmin {
+    $Variables = Get-Content -Path ($pathProject + "settings.json") -Raw | ConvertFrom-Json # загрузка JSON файла настроек
+    $DCs = Get-DCs
+    $CompArr = $DCs
+    $ExportFolder = Get-Location
+    $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+
+    foreach ($comp in $CompArr) {
+    
+        $REPADMIN = Invoke-Command -ComputerName $comp -ScriptBlock {} # тут нужно дописать команду
+
+        Write-Host Processing Start REPADMIN $comp
+
+        $ExportFile = $ExportFolder + $comp + "_REPADMIN_" + $now.ToString("yyyy-MM-dd--hh-mm-ss") + ".csv"
+
+        $REPADMIN | Export-CSV $ExportFile -NoTypeInfo
+    }
+
+    Write-Host Done!
+}
+
 function Start-AuditAD {
     $totalSteps = 4
     $step = 1
@@ -288,6 +330,12 @@ function Start-AuditAD {
 
     Write-Host GET INFORMATION ABOUT INSTALLED WINDOWS FEATURE [($step++)/$totalSteps]
     Get-WindowsFeature
+
+    Write-Host START TEST DCDIAG [($step++)/$totalSteps]
+    Start-DCDIAG
+
+    Write-Host START TEST REPADMIN [($step++)/$totalSteps]
+    Start-Repadmin
 
     Write-Host DONE!
 } 
