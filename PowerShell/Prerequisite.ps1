@@ -27,10 +27,12 @@ Write-Host All Domain Controllers
 WriteLog "List Domain Controllers"
 $domControllers = Get-ADDomainController -filter * | Select-Object HostName
 $totalDC = $domControllers.Count
-for ($i = 0; $i -lt $domControllers.Count; $i++) {
+
+foreach ($domController in $domControllers) {
     WriteLog $domController.HostName
     Write-Host $domController.HostName
-} 
+}
+Write-Host Total Domain Controllers $totalDC
 WriteLog "[Info] Total Domain Controllers $totalDC"
 
 Write-Host
