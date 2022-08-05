@@ -250,6 +250,7 @@ function Get-WindowsFeature {
     $CompArr = $DCs
     $ExportFolder = Get-Location
     $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+    $now = Get-Date
 
     foreach ($comp in $CompArr) {
 
@@ -271,6 +272,7 @@ function Start-DCDIAG {
     $CompArr = $DCs
     $ExportFolder = Get-Location
     $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+    $now = Get-Date
 
     foreach ($comp in $CompArr) {
     
@@ -292,6 +294,7 @@ function Start-Repadmin {
     $CompArr = $DCs
     $ExportFolder = Get-Location
     $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+    $now = Get-Date
 
     foreach ($comp in $CompArr) {
     
@@ -312,6 +315,7 @@ function Get-InfoDNS {
 
     $ExportFolder = Get-Location
     $ExportFolder = $ExportFolder.Path + "\" + $Variables.Inventory.folder + "\"
+    $now = Get-Date
 
     $infoDNS =  Get-DnsServer 
 
@@ -325,35 +329,35 @@ function Get-InfoDNS {
 }
 
 function Start-AuditAD {
-    $totalSteps = 4
+    $totalSteps = 10
     $step = 1
     
-    # Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [($step++)/$totalSteps]
-    # Get-WindowsEvents
+    Write-Host GET INFORMATION ABOUT WINDOWS EVENTS [($step++)/$totalSteps]
+    Get-WindowsEvents
 
-    # Write-Host START PERFORMANCE MONITORS [++$step/$totalSteps] 
-    # Start-PerformanceMonitors
+    Write-Host START PERFORMANCE MONITORS [$step++/$totalSteps] 
+    Start-PerformanceMonitors
     
-    # Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
-    # Start-InventorySoftware
+    Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
+    Start-InventorySoftware
     
-    # Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
-    # Start-InventoryHardware
+    Write-Host START INVENTORY SOFTWARE [($step++)/$totalSteps]
+    Start-InventoryHardware
     
-    # Write-Host START INVENTORY HOTFIXes [($step++)/$totalSteps]
-    # Start-InventoryHotFix
+    Write-Host START INVENTORY HOTFIXes [($step++)/$totalSteps]
+    Start-InventoryHotFix
 
-    # Write-Host GET INFORMATION ABOUT OS [($step++)/$totalSteps]
-    # Get-InfoOS
+    Write-Host GET INFORMATION ABOUT OS [($step++)/$totalSteps]
+    Get-InfoOS
 
-    # Write-Host GET INFORMATION ABOUT INSTALLED WINDOWS FEATURE [($step++)/$totalSteps]
-    # Get-WindowsFeature
+    Write-Host GET INFORMATION ABOUT INSTALLED WINDOWS FEATURE [($step++)/$totalSteps]
+    Get-WindowsFeature
 
-    # Write-Host START TEST DCDIAG [($step++)/$totalSteps]
-    # Start-DCDIAG
+    Write-Host START TEST DCDIAG [($step++)/$totalSteps]
+    Start-DCDIAG
 
-    # Write-Host START TEST REPADMIN [($step++)/$totalSteps]
-    # Start-Repadmin
+    Write-Host START TEST REPADMIN [($step++)/$totalSteps]
+    Start-Repadmin
 
     Write-Host GET INFORMATION ABOUT DNS [($step++)/$totalSteps]
     Get-InfoDNS
