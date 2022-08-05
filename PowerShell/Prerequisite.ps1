@@ -1,4 +1,4 @@
-#
+ #
 #  This script prerequisite for audit AD
 #  Author: Danil Stepanov, msware.ru (c) 2022
 #
@@ -29,8 +29,14 @@ $domControllers = Get-ADDomainController -filter * | Select-Object HostName
 $totalDC = $domControllers.Count
 
 foreach ($domController in $domControllers) {
-    WriteLog $domController.HostName
-    Write-Host $domController.HostName
+    if(Test-Connection -ComputerName $domController.HostName -Count 1 -Quiet){
+        WriteLog ("[OK] " + $domController.HostName + " ... test connect OK")
+        Write-Host $domController.HostName ... test connect OK
+    }
+    else {
+        WriteLog ("[Error] " + $domController.HostName + " ... Error connected")
+        Write-Host $domController.HostName ... Error Connected
+    }
 }
 Write-Host Total Domain Controllers $totalDC
 WriteLog "[Info] Total Domain Controllers $totalDC"
@@ -43,8 +49,14 @@ foreach ($domController in $domControllers) {
         $PSVer = Invoke-Command -ComputerName $domController.HostName -ScriptBlock { $PSVersionTable }
         $psVersion = $PSVer.PSVersion
         $dc = $domController.HostName
-        WriteLog "$dc PS version $psVersion"
-        Write-Host $domController.HostName "PS version" $PSVer.PSVersion
+        if ($psVersion -ge 5.1){
+            $PSResult = " ... version PowerShell OK"
+        }
+        else {
+            $PSResult = " ... need update PowerShells to version 5.1"
+        }
+        WriteLog "$dc PS version $psVersion $PSResult"
+        Write-Host $domController.HostName "PowerShell version" $PSVer.PSVersion $PSResult
     }
     catch {
         $doneError = $true
@@ -59,4 +71,4 @@ if ($doneError) {
 else {
     Write-Host 
     Write-Host Done!
-} 
+}  
