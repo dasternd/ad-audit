@@ -21,5 +21,8 @@
     },
     "inventory":{
         "folder": "Inventory"
+    },
+    "AD":{
+        "folder": "AD"
     }
 }
