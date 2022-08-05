@@ -20,22 +20,25 @@ function WriteLog
     Add-content $LogFile -value $LogMessage
 }
 
+Clear-Host
 Write-Host "Prerequisite for audit Active Directory"
 
 Write-Host
-Write-Host All Domain Controllers
+Write-Host List Domain Controllers
 WriteLog "List Domain Controllers"
 $domControllers = Get-ADDomainController -filter * | Select-Object HostName
 $totalDC = $domControllers.Count
 
 foreach ($domController in $domControllers) {
+    Write-Host Connecting to domain controller $domController.HostName ...
+
     if(Test-Connection -ComputerName $domController.HostName -Count 1 -Quiet){
-        WriteLog ("[OK] " + $domController.HostName + " ... test connect OK")
-        Write-Host $domController.HostName ... test connect OK
+        WriteLog ("[OK] " + "Test connect to domain controller " + $domController.HostName + " is OK")
+        Write-Host Test connect to domain controller $domController.HostName is OK
     }
     else {
-        WriteLog ("[Error] " + $domController.HostName + " ... Error connected")
-        Write-Host $domController.HostName ... Error Connected
+        WriteLog ("[Error] " + "Error connected to domain controller " + $domController.HostName)
+        Write-Host Error connected to domain controller $domController.HostName
     }
 }
 Write-Host Total Domain Controllers $totalDC
@@ -50,13 +53,14 @@ foreach ($domController in $domControllers) {
         $psVersion = $PSVer.PSVersion
         $dc = $domController.HostName
         if ($psVersion -ge 5.1){
-            $PSResult = " ... version PowerShell OK"
+            WriteLog ("[OK] " + "$dc have PS version $psVersion is OK")
+            Write-Host $dc have PS version $psVersion is OK
         }
         else {
-            $PSResult = " ... need update PowerShells to version 5.1"
+            WriteLog ("[Warning] " + "$dc have PS version $psVersion need update PowerShells to version 5.1")
+            Write-Host $dc have PS version $psVersion need update PowerShells to version 5.1
         }
-        WriteLog "$dc PS version $psVersion $PSResult"
-        Write-Host $domController.HostName "PowerShell version" $PSVer.PSVersion $PSResult
+
     }
     catch {
         $doneError = $true
