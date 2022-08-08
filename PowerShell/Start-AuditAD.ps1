@@ -46,6 +46,9 @@ function Get-WindowsEvents {
     $startdate = $now.AddDays(-$eventAgeDays)
 
     if (!(Test-Path $folderEvents)) {
+        Write-Host Created new folder to path $folderEvents
+        WriteLog "[Info] Created new folder to path $folderEvents"
+
         New-Item -Path $folderEvents -ItemType Directory
     }
 
@@ -54,6 +57,8 @@ function Get-WindowsEvents {
         $ExportFile = $folderEvents + "Events_" + $DC + ".csv"
 
         if (Test-Path $ExportFile) { 
+            Write-Host Discovered old file $ExportFile File removed
+            WriteLog "[Info] Discovered old file $ExportFile File removed"
             Remove-Item $ExportFile 
         }
 
@@ -109,14 +114,20 @@ function Start-InventorySoftware {
     $listDCs = Get-DCs
     
     if (!(Test-Path $folderInventory)) {
+        Write-Host Created new folder to path $folderInventory
+        WriteLog "[Info] Created new folder to path $folderInventory"
+
         New-Item -Path $folderInventory -ItemType Directory
     }
 
     foreach ($DC in $listDCs) {
 
         $ExportFile = $folderInventory + "InventorySoftware_" + $DC + ".csv"
-    
-        if (Test-Path $ExportFile) { 
+
+        if (Test-Path $ExportFile) {
+            Write-Host Discovered old file $ExportFile File removed
+            WriteLog "[Info] Discovered old file $ExportFile File removed"
+
             Remove-Item $ExportFile 
         }
 
@@ -157,6 +168,9 @@ function Start-InventoryHardware {
     $listDCs = Get-DCs
     
     if (!(Test-Path $folderInventory)) {
+        Write-Host Created new folder to path $folderInventory
+        WriteLog "[Info] Created new folder to path $folderInventory"
+
         New-Item -Path $folderInventory -ItemType Directory
     }
     
@@ -219,7 +233,10 @@ function Start-InventoryHardware {
     
     $ExportFile = $folderInventory + "InventoryHardware_DomainControllers.csv"
     
-    if (Test-Path $ExportFile) { 
+    if (Test-Path $ExportFile) {
+        Write-Host Discovered old file $ExportFile File removed
+        WriteLog "[Info] Discovered old file $ExportFile File removed"
+
         Remove-Item $ExportFile 
     }
 
@@ -236,6 +253,9 @@ function Start-InventoryHotFix {
     $listDCs = Get-DCs
 
     if (!(Test-Path $folderInventory)) {
+        Write-Host Created new folder to path $folderInventory
+        WriteLog "[Info] Created new folder to path $folderInventory"
+
         New-Item -Path $folderInventory -ItemType Directory
     }
 
@@ -243,7 +263,10 @@ function Start-InventoryHotFix {
 
         $ExportFile = $folderInventory + "InventoryHotfix_" + $DC + ".csv"
 
-        if (Test-Path $ExportFile) { 
+        if (Test-Path $ExportFile) {
+            Write-Host Discovered old file $ExportFile File removed
+            WriteLog "[Info] Discovered old file $ExportFile File removed"
+
             Remove-Item $ExportFile 
         }
 
@@ -284,6 +307,9 @@ function Get-InfoOS {
     $listDCs = Get-DCs
     
     if (!(Test-Path $folderInventory)) {
+        Write-Host Created new folder to path $folderInventory
+        WriteLog "[Info] Created new folder to path $folderInventory"
+
         New-Item -Path $folderInventory -ItemType Directory
     }
     
@@ -293,7 +319,10 @@ function Get-InfoOS {
 
         $ExportFile = $folderInventory + "InfoOS_" + $DC + ".csv"
 
-        if (Test-Path $ExportFile) { 
+        if (Test-Path $ExportFile) {
+            Write-Host Discovered old file $ExportFile File removed
+            WriteLog "[Info] Discovered old file $ExportFile File removed"
+
             Remove-Item $ExportFile 
         }
 
@@ -355,6 +384,9 @@ function Get-WindowsFeature {
     $listDCs = Get-DCs
     
     if (!(Test-Path $folderInventory)) {
+        Write-Host Created new folder to path $folderInventory
+        WriteLog "[Info] Created new folder to path $folderInventory"
+
         New-Item -Path $folderInventory -ItemType Directory
     }
 
@@ -362,7 +394,10 @@ function Get-WindowsFeature {
 
         $ExportFile = $folderInventory + "WindowsFeature_" + $DC + ".csv"
 
-        if (Test-Path $ExportFile) { 
+        if (Test-Path $ExportFile) {
+            Write-Host Discovered old file $ExportFile File removed
+            WriteLog "[Info] Discovered old file $ExportFile File removed"
+
             Remove-Item $ExportFile 
         }
 
@@ -402,6 +437,9 @@ function Start-DCDIAG {
     $listDCs = Get-DCs
     
     if (!(Test-Path $folderAD)) {
+        Write-Host Created new folder to path $folderAD
+        WriteLog "[Info] Created new folder to path $folderAD"
+
         New-Item -Path $folderAD -ItemType Directory
     }
 
@@ -409,7 +447,10 @@ function Start-DCDIAG {
 
         $ExportFile = $folderAD + "DCDIAG_" + $DC + ".txt"
     
-        if (Test-Path $ExportFile) { 
+        if (Test-Path $ExportFile) {
+            Write-Host Discovered old file $ExportFile File removed
+            WriteLog "[Info] Discovered old file $ExportFile File removed"
+
             Remove-Item $ExportFile 
         }
 
@@ -450,6 +491,9 @@ function Start-Repadmin {
     $listDCs = Get-DCs
     
     if (!(Test-Path $folderAD)) {
+        Write-Host Created new folder to path $folderAD
+        WriteLog "[Info] Created new folder to path $folderAD"
+
         New-Item -Path $folderAD -ItemType Directory
     }
 
@@ -457,7 +501,10 @@ function Start-Repadmin {
     
         $ExportFile = $folderAD + "REPADMIN_" + $DC + ".txt"
     
-        if (Test-Path $ExportFile) { 
+        if (Test-Path $ExportFile) {
+            Write-Host Discovered old file $ExportFile File removed
+            WriteLog "[Info] Discovered old file $ExportFile File removed"
+
             Remove-Item $ExportFile 
         }
 
@@ -498,6 +545,9 @@ function Get-InfoDNS {
     $listDCs = Get-DCs
     
     if (!(Test-Path $folderAD)) {
+        Write-Host Created new folder to path $folderAD
+        WriteLog "[Info] Created new folder to path $folderAD"
+
         New-Item -Path $folderAD -ItemType Directory
     }
 
@@ -505,7 +555,10 @@ function Get-InfoDNS {
 
         $ExportFile = $folderAD + "InfoDNS_" + $DC + ".txt"
     
-        if (Test-Path $ExportFile) { 
+        if (Test-Path $ExportFile) {
+            Write-Host Discovered old file $ExportFile File removed
+            WriteLog "[Info] Discovered old file $ExportFile File removed"
+
             Remove-Item $ExportFile 
         }
 
@@ -612,6 +665,16 @@ function Start-AuditAD {
 
     Write-Host
     Write-Host DONE!
+
+    $folder = Get-Location
+    $fileZIP = $folder.Path + "\ResultAuditAD.zip"
+    if (!(Test-Path $fileZIP)) {
+        Compress-Archive -Path ($folder.Path + "\*") -DestinationPath $fileZIP 
+    }
+    else {
+        Remove-Item $fileZIP
+        Compress-Archive -Path ($folder.Path + "\*") -DestinationPath $fileZIP 
+    }
 } 
 
 Start-AuditAD 
