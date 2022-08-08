@@ -664,8 +664,7 @@ function Start-AuditAD {
     Get-InfoDNS
 
     Write-Host
-    Write-Host DONE!
-
+    Write-Host "ZIPing all data files to archive ..."
     $folder = Get-Location
     $fileZIP = $folder.Path + "\ResultAuditAD.zip"
     if (!(Test-Path $fileZIP)) {
@@ -675,6 +674,9 @@ function Start-AuditAD {
         Remove-Item $fileZIP
         Compress-Archive -Path ($folder.Path + "\*") -DestinationPath $fileZIP 
     }
+    Write-Host "Archive with all data files created to $fileZIP"
+
+    Write-Host DONE!
 } 
 
 Start-AuditAD 
