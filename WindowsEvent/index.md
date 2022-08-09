@@ -1,3 +1,5 @@
+[Главная](/) - Сбор журналов событий
+
 # Сбор журналов событий (Windows Event)
 
 Сбор событий в журналах Windows осуществляется средствами скрипта PowerShell [Start-AuditAD.ps1](/PowerShell/Start-AuditAD.ps1).
