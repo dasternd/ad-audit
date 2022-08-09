@@ -1,5 +1,5 @@
 {
-    "workFolder": "Audit",
+    "workFolder": "AuditAD",
     "windowsEvent": {
         "folder": "Events",
         "daysLastGetEvents": 30,
