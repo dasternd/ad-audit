@@ -14,25 +14,31 @@
 
 ```json
 {
-    "workFolder": "Audit",
+    "workFolder": "Audit",              // рабочий каталог 
     "windowsEvent": {
-        "folder": "Events",
-        "daysLastGetEvents": 30,
-        "logs": [
+        "folder": "Events",             // каталог в котором сохраняются .csv файлы с журналов Windows контроллеров доменов
+        "daysLastGetEvents": 30,        // количество дней от текущей даты для сбора событий из журналов Windows
+        "logs": [                       // перечень журналов событий Windows
             "Application",
             "System",
             "DFS Replication",
             "Directory Service",
             "DNS Server"
         ],
-        "eventTypes": [
+        "eventTypes": [                 // типы событий журналов Windows
             "Error",
             "Warning"
         ]
     },
     "PerformanceMonitor": {
-        "folder": "PerfLogs",
+        "folder": "PerfLogs",           // каталог в котором сохраняются результаты метрик производительности котроллеров домена
         "daysRun2GetMetrics": 7
+    },
+    "inventory":{
+        "folder": "Inventory"           // каталог в котором сохраняются данные по инвенторизации
+    },
+    "AD":{
+        "folder": "AD"                  // каталог в котором сохраняются результаты тестирования контроллеров доменов
     }
 }
 ```
