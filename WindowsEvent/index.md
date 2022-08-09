@@ -17,7 +17,7 @@
 
 код функции отвечающий за сбор событий с журналов Windows на контроллерах домена:
 
-```PS
+```PowerShell
 function Get-WindowsEvents {
     $listDCs = Get-DCs
     $eventAgeDays = $fileSettings.WindowsEvent.daysLastGetEvents
