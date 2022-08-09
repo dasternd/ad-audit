@@ -10,6 +10,7 @@
 $pathProject = Get-Location 
 $pathProject = $pathProject.Path + "\"
 $fileSettings = Get-Content -Path ($pathProject + "settings.json")  -Raw | ConvertFrom-Json # загрузка JSON файла настроек
+$folderHome = $fileSettings.workFolder
 $folderEvents = $pathProject + $fileSettings.WindowsEvent.folder + "\"
 $folderInventory = $pathProject + $fileSettings.Inventory.folder + "\"
 $folderAD = $pathProject + $fileSettings.AD.folder + "\"
@@ -105,20 +106,63 @@ function Get-WindowsEvents {
 function Start-PerformanceMonitors {
     # !!! ATTENTION
     # Need add network path xml file for Performance Monitors
+    # Need open port firewall (Allowed apps) - Permofmance Logs and Alerts
 
     $DClist = Get-DCs
 
-    foreach ($DC in $DClist) {
-        $lm = logman query "Domain Controller Diagnostics"
+    $sysinfo = Get-WmiObject -Class Win32_ComputerSystem
+    $server = “{0}.{1}” -f $sysinfo.Name, $sysinfo.Domain 
 
-        if ($lm[1].Contains('Error')) {
-            Invoke-Command -ComputerName $DC -ScriptBlock { C:\Windows\System32\logman.exe import "Domain Controller Diagnostics" -xml \\dc2.msware.ru\AuditAD\PerfMon-DomainControllerDiagnostics.xml }
-            Invoke-Command -ComputerName $DC -ScriptBlock { C:\Windows\System32\logman.exe start  "Domain Controller Diagnostics" }
-        }
-        else {
+    $networkMXLFile = "\\" + $server + "\" + $folderHome + "\" + "PerfMon-DomainControllerDiagnostics.xml"
+
+    foreach ($DC in $DClist) {
+        $lm = logman -s $DC query "Domain Controller Diagnostics"
+
+        if ($lm[1].Contains('Domain Controller Diagnostics')) {
             Write-Host Такой набор метрик производительности уже имеется на $DC
+            if ($lm[2].Contains('Running')) {
+                Write-Host Статус запуска ЗАПУЩЕН
+            }
+            if ($lm[2].Contains('Stopped')) {
+                Write-Host Статус запуска ОСТАНОВЛЕН
+            }
+
         }
-    }
+
+        if ($lm[2].Contains('Data Collector Set was not found')) {
+            # Invoke-Command -ComputerName $DC -ScriptBlock { C:\Windows\System32\logman.exe import "Domain Controller Diagnostics" -xml \\dc2.msware.ru\AuditAD\PerfMon-DomainControllerDiagnostics.xml }
+            # Invoke-Command -ComputerName $DC -ScriptBlock { C:\Windows\System32\logman.exe start  "Domain Controller Diagnostics" }
+            
+            if (Test-Path $networkMXLFile) {
+                try {
+                    
+                    $sysdisk = Get-ChildItem -Path Env:\SystemDrive
+                    # $dtlPath = $sysdisk.Value + "\PerfLogs\Admin\Domain Controller Diagnostics.blg"
+
+                    $result = Invoke-Command -ComputerName $DC -ScriptBlock { Test-Path "c:\PerfLogs\Admin\Domain Controller Diagnostics.blg" }
+                    Write-Host Резельтат $result
+                    Invoke-Command -ComputerName $DC -ScriptBlock { Remove-Item "c:\PerfLogs\Admin\Domain Controller Diagnostics.blg" }
+
+                    Write-Host Импорт XML файла на $DC
+                    logman -s $DC import "Domain Controller Diagnostics" -xml $networkMXLFile
+                    logman -s $DC start  "Domain Controller Diagnostics"
+                }
+                catch {
+                    Write-Host Что то пошло не так
+                    Write-Host $Error
+                }
+            }
+            else {
+                Write-Host File PerfMon-DomainControllerDiagnostics.xml not found
+            }
+        }
+       
+        
+    } 
+
+
+ 
+
 }
 
 function Start-InventorySoftware {
@@ -585,7 +629,7 @@ function Get-InfoDNS {
                 WriteLog "[Info] Processing Start InfoDNS $DC ..."
 
                 $infoDNS = Get-DnsServer
-                }
+            }
             catch {
                 Write-Host Error during Start InfoDNS $DC\$log
                 WriteLog "[Error] Error during Start InfoDNS $DC\$log"
