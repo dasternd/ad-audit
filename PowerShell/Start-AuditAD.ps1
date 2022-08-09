@@ -3,6 +3,9 @@
 #  Author: Danil Stepanov, msware.ru (c) 2022
 #
 
+# !!! ATTENTION
+# Need add network path xml file for Performance Monitors
+
 # адрес каталога проекта, где будет размещены все входные и выходные файлы
 $pathProject = Get-Location 
 $pathProject = $pathProject.Path + "\"
@@ -100,15 +103,23 @@ function Get-WindowsEvents {
 }
 
 function Start-PerformanceMonitors {
-    $DCs = Get-DCs
-    $CompArr = $DCs
-    # $ExportFolder = "\\dc2.msware.ru\AuditAD\PerfMon-DomainControllerDiagnostics.xml"
+    # !!! ATTENTION
+    # Need add network path xml file for Performance Monitors
 
-    foreach ($comp in $CompArr) {
-        Invoke-Command -ComputerName $comp -ScriptBlock { C:\Windows\System32\logman.exe import "Domain Controller Diagnostics" -xml \\dc2.msware.ru\AuditAD\PerfMon-DomainControllerDiagnostics.xml }
-        Invoke-Command -ComputerName $comp -ScriptBlock { C:\Windows\System32\logman.exe start  "Domain Controller Diagnostics" }
+    $DClist = Get-DCs
+
+    foreach ($DC in $DClist) {
+        $lm = logman query "Domain Controller Diagnostics"
+
+        if ($lm[1].Contains('Error')) {
+            Invoke-Command -ComputerName $DC -ScriptBlock { C:\Windows\System32\logman.exe import "Domain Controller Diagnostics" -xml \\dc2.msware.ru\AuditAD\PerfMon-DomainControllerDiagnostics.xml }
+            Invoke-Command -ComputerName $DC -ScriptBlock { C:\Windows\System32\logman.exe start  "Domain Controller Diagnostics" }
+        }
+        else {
+            Write-Host Такой набор метрик производительности уже имеется на $DC
+        }
     }
-} 
+}
 
 function Start-InventorySoftware {
     $listDCs = Get-DCs
